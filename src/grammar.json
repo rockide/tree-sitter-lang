@@ -1,0 +1,197 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "lang",
+  "rules": {
+    "source_file": {
+      "type": "REPEAT",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_line"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "\\r?\\n"
+              },
+              {
+                "type": "STRING",
+                "value": "\u0000"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "_line": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "\\s+"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "comment"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "key",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "key"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "assignment",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "assignment"
+                  }
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "FIELD",
+                      "name": "value",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "value"
+                      }
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "inline_comment"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "key": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^=\\r\\n]+"
+      }
+    },
+    "assignment": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "="
+      }
+    },
+    "value": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "text"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "linebreak"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "format_code"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "input_key"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "format_specifier"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[^\\t]"
+          }
+        ]
+      }
+    },
+    "comment": {
+      "type": "PATTERN",
+      "value": "#{2,}.*"
+    },
+    "inline_comment": {
+      "type": "PATTERN",
+      "value": "\\t.*"
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "\\s"
+    }
+  ],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "text"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "linebreak"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "format_code"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "input_key"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "format_specifier"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "emoji"
+    }
+  ],
+  "inline": [],
+  "supertypes": [],
+  "reserved": {}
+}

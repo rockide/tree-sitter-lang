@@ -1,0 +1,39 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "lang",
+      "camelcase": "Lang",
+      "title": "Lang",
+      "scope": "source.rockide.lang",
+      "file-types": ["lang"],
+      "injection-regex": "^lang$",
+      "class-name": "TreeSitterLang",
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Tree sitter for Minecraft language.",
+    "authors": [
+      {
+        "name": "rockide",
+        "email": "renixiel@gmail.com",
+        "url": "https://svdex.moe/"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/rockide/tree-sitter-lang"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
