@@ -27,12 +27,12 @@ static inline bool match_literal(TSLexer *lexer, const char *pattern)
   return true;
 }
 
-static inline is_eof(TSLexer *lexer)
+static inline bool is_eof(TSLexer *lexer)
 {
   return lexer->eof(lexer) || lexer->lookahead == '\0' || lexer->lookahead == '\r' || lexer->lookahead == '\n' || lexer->lookahead == '\t';
 }
 
-static inline match_linebreak(TSLexer *lexer)
+static inline bool match_linebreak(TSLexer *lexer)
 {
   if (match_literal(lexer, "~LINEBREAK~"))
   {
@@ -41,7 +41,7 @@ static inline match_linebreak(TSLexer *lexer)
   return false;
 }
 
-static inline match_format_code(TSLexer *lexer)
+static inline bool match_format_code(TSLexer *lexer)
 {
   if (lexer->lookahead == 0xA7) // '§' character
   {
@@ -55,7 +55,7 @@ static inline match_format_code(TSLexer *lexer)
   return false;
 }
 
-static inline match_format_specifier(TSLexer *lexer)
+static inline bool match_format_specifier(TSLexer *lexer)
 {
   if (lexer->lookahead == '%')
   {
@@ -104,7 +104,7 @@ static inline match_format_specifier(TSLexer *lexer)
   return false;
 }
 
-static inline match_input_key(TSLexer *lexer)
+static inline bool match_input_key(TSLexer *lexer)
 {
   if (match_literal(lexer, ":_input_"))
   {

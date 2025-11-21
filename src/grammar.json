@@ -154,7 +154,7 @@
     },
     "inline_comment": {
       "type": "PATTERN",
-      "value": "\\t.*"
+      "value": "\\t#.*"
     }
   },
   "extras": [
