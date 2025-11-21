@@ -53,8 +53,8 @@ module.exports = grammar({
         )
       ),
     comment: ($) => /#{2,}.*/,
-    // Anything after a tab character is considered an inline comment.
-    // `\t###` is a misconception.
-    inline_comment: ($) => /\t.*/,
+    // Anything after a tab character is ignored.
+    // We're using `\t#` for inline comments.
+    inline_comment: ($) => /\t#.*/,
   },
 });
