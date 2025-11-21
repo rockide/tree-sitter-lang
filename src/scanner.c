@@ -1,4 +1,5 @@
 #include "tree_sitter/parser.h"
+#include <string.h>
 
 enum TokenType {
   TEXT,
@@ -7,8 +8,6 @@ enum TokenType {
   INPUT_KEY,
   FORMAT_SPECIFIER,
 };
-
-// TODO: Emoji
 
 static inline bool match_literal(TSLexer *lexer, const char *pattern) {
   const char *p = pattern;
@@ -87,17 +86,212 @@ static inline bool match_format_specifier(TSLexer *lexer) {
 }
 
 static inline bool match_input_key(TSLexer *lexer) {
-  if (match_literal(lexer, ":_input_")) {
-    while (true) {
-      if (is_eof(lexer) || lexer->lookahead == ':') {
-        break;
+  // https://wiki.bedrock.dev/text/emojis
+  // https://wiki.bedrock.dev/text/input-keys
+  char *inputs[] = {":wood_pickaxe:",
+                    ":wood_sword:",
+                    ":crafting_table:",
+                    ":furnace:",
+                    ":armor:",
+                    ":tip_crosshair:",
+                    ":shank:",
+                    ":heart:",
+                    ":minecoin:",
+                    ":token:",
+                    ":craftable_toggle_on:",
+                    ":craftable_toggle_off:",
+                    ":mouse_left_button:",
+                    ":mouse_right_button:",
+                    ":mouse_middle_button:",
+                    ":mouse_button:",
+                    ":light_mouse_left_button:",
+                    ":light_mouse_right_button:",
+                    ":light_mouse_middle_button:",
+                    ":light_mouse_button:",
+                    ":touch_forward:",
+                    ":touch_left:",
+                    ":touch_right:",
+                    ":touch_jump:",
+                    ":touch_sneak:",
+                    ":touch_chat:",
+                    ":touch_sprint_double_tap:",
+                    ":tip_virtual_button_jump:",
+                    ":tip_virtual_button_action_attack_or_destroy:",
+                    ":tip_virtual_joystick:",
+                    ":touch_virtual_joystick_forward:",
+                    ":touch_virtual_joystick_back:",
+                    ":touch_virtual_joystick_right:",
+                    ":tip_virtual_button_action_build_or_use:",
+                    ":tip_virtual_button_sneak:",
+                    ":tip_virtual_button_sprint:",
+                    ":touch_sprint:",
+                    ":tip_virtual_button_fly_up:",
+                    ":tip_virtual_button_fly_down:",
+                    ":tip_virtual_button_dismount:",
+                    ":touch_fly_up:",
+                    ":touch_fly_down:",
+                    ":touch_stop_flying:",
+                    ":tip_touch_sneak:",
+                    ":tip_touch_jump:",
+                    ":tip_touch_inventory:",
+                    ":tip_touch_fly_up:",
+                    ":tip_touch_fly_down:",
+                    ":tip_touch_forward:",
+                    ":tip_touch_left:",
+                    ":tip_touch_back:",
+                    ":tip_touch_right:",
+                    ":ps4_left_stick_up:",
+                    ":switch_left_stick_up:",
+                    ":xbox_left_stick_up:",
+                    ":ps4_left_stick_left:",
+                    ":switch_left_stick_left:",
+                    ":xbox_left_stick_left:",
+                    ":ps4_left_stick_down:",
+                    ":switch_left_stick_down:",
+                    ":xbox_left_stick_down:",
+                    ":ps4_left_stick_right:",
+                    ":switch_left_stick_right:",
+                    ":xbox_left_stick_right:",
+                    ":ps4_right_stick_up:",
+                    ":switch_right_stick_up:",
+                    ":xbox_right_stick_up:",
+                    ":ps4_right_stick_left:",
+                    ":switch_right_stick_left:",
+                    ":xbox_right_stick_left:",
+                    ":ps4_right_stick_down:",
+                    ":switch_right_stick_down:",
+                    ":xbox_right_stick_down:",
+                    ":ps4_right_stick_right:",
+                    ":switch_right_stick_right:",
+                    ":xbox_right_stick_right:",
+                    ":switch_face_button_down:",
+                    ":switch_face_button_right:",
+                    ":switch_face_button_left:",
+                    ":switch_face_button_up:",
+                    ":switch_bumper_left:",
+                    ":switch_bumper_right:",
+                    ":switch_trigger_left:",
+                    ":switch_trigger_right:",
+                    ":switch_select:",
+                    ":switch_start:",
+                    ":switch_stick_left:",
+                    ":switch_stick_right:",
+                    ":switch_dpad_up:",
+                    ":switch_dpad_left:",
+                    ":switch_dpad_down:",
+                    ":switch_dpad_right:",
+                    ":ps4_face_button_down:",
+                    ":ps4_face_button_right:",
+                    ":ps4_face_button_left:",
+                    ":ps4_face_button_up:",
+                    ":ps4_bumper_left:",
+                    ":ps4_bumper_right:",
+                    ":ps4_trigger_left:",
+                    ":ps4_trigger_right:",
+                    ":ps4_select:",
+                    ":ps4_start:",
+                    ":ps4_stick_left:",
+                    ":ps4_stick_right:",
+                    ":ps4_dpad_up:",
+                    ":ps4_dpad_left:",
+                    ":ps4_dpad_down:",
+                    ":ps4_dpad_right:",
+                    ":xbox_face_button_down:",
+                    ":xbox_face_button_right:",
+                    ":xbox_face_button_left:",
+                    ":xbox_face_button_up:",
+                    ":xbox_bumper_left:",
+                    ":xbox_bumper_right:",
+                    ":xbox_trigger_left:",
+                    ":xbox_trigger_right:",
+                    ":xbox_select:",
+                    ":xbox_start:",
+                    ":xbox_stick_left:",
+                    ":xbox_stick_right:",
+                    ":xbox_dpad_up:",
+                    ":xbox_dpad_left:",
+                    ":xbox_dpad_down:",
+                    ":xbox_dpad_right:",
+                    ":nbsp:",
+                    ":code_builder_button:",
+                    ":hollow_star:",
+                    ":solid_star:",
+                    ":camera:",
+                    ":_input_key.attack:",
+                    ":_input_key.use:",
+                    ":_input_key.char:",
+                    ":_input_key.drop:",
+                    ":_input_key.emote:",
+                    ":_input_key.jump:",
+                    ":_input_key.sneak:",
+                    ":_input_key.sprint:",
+                    ":_input_key.forward:",
+                    ":_input_key.back:",
+                    ":_input_key.left:",
+                    ":_input_key.right:",
+                    ":_input_key.inventory:",
+                    ":_input_key.cycleItemLeft:",
+                    ":_input_key.cycleItemRight:",
+                    ":_input_key.togglePerspective:",
+                    ":_input_key.pickItem:",
+                    ":_input_key.hotbar.1:",
+                    ":_input_key.hotbar.2:",
+                    ":_input_key.hotbar.3:",
+                    ":_input_key.hotbar.4:",
+                    ":_input_key.hotbar.5:",
+                    ":_input_key.hotbar.6:",
+                    ":_input_key.hotbar.7:",
+                    ":_input_key.hotbar.8:",
+                    ":_input_key.hotbar.9:",
+                    ":_input_key.lookUpSlight:",
+                    ":_input_key.lookDownSlight:",
+                    ":_input_key.lookDownLeft:",
+                    ":_input_key.lookDown:",
+                    ":_input_key.lookDownRight:",
+                    ":_input_key.lookLeft:",
+                    ":_input_key.lookCenter:",
+                    ":_input_key.lookRight:",
+                    ":_input_key.lookUpLeft:",
+                    ":_input_key.lookUp:",
+                    ":_input_key.lookUpRight:",
+                    ":_input_key.lookUpSmooth:",
+                    ":_input_key.lookDownSmooth:",
+                    ":_input_key.lookLeftSmooth:",
+                    ":_input_key.lookRightSmooth:",
+                    ":_input_key.menuCancel:",
+                    ":_input_key.mobEffects:",
+                    ":_input_key.command:",
+                    ":_input_key.interactwithtoast:",
+                    ":_input_key.toggleRenderer:",
+                    ":_input_key.declineToast:",
+                    ":_input_key.flyUpSlow:",
+                    ":_input_key.flyDownSlow:",
+                    ":_input_key.mobeffectsandinteractwithtoast:"};
+  size_t size = sizeof(inputs) / sizeof(inputs[0]);
+  while (1) {
+    if (is_eof(lexer)) {
+      break;
+    }
+    bool matched = false;
+    for (size_t i = 0; i < size; i++) {
+      if (strlen((inputs[i])) == 0) {
+        continue;
       }
-      lexer->advance(lexer, false);
+      if (lexer->lookahead == inputs[i][0]) {
+        inputs[i]++;
+        matched = true;
+        if (strlen(inputs[i]) == 0) {
+          lexer->advance(lexer, false);
+          return true;
+        }
+      } else {
+        inputs[i] = "";
+      }
     }
-    if (lexer->lookahead == ':') {
-      lexer->advance(lexer, false);
-      return true;
+    if (!matched) {
+      break;
     }
+    lexer->advance(lexer, false);
   }
   return false;
 }
