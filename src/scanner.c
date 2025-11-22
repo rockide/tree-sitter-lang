@@ -302,39 +302,61 @@ bool tree_sitter_lang_external_scanner_scan(void *payload, TSLexer *lexer,
     return false;
   }
 
+  lexer->mark_end(lexer);
   if (valid_symbols[LINEBREAK] && match_linebreak(lexer)) {
     lexer->result_symbol = LINEBREAK;
+    lexer->mark_end(lexer);
     return true;
   }
 
   if (valid_symbols[FORMAT_CODE] && match_format_code(lexer)) {
     lexer->result_symbol = FORMAT_CODE;
+    lexer->mark_end(lexer);
     return true;
   }
 
   if (valid_symbols[FORMAT_SPECIFIER] && match_format_specifier(lexer)) {
     lexer->result_symbol = FORMAT_SPECIFIER;
+    lexer->mark_end(lexer);
     return true;
   }
 
   if (valid_symbols[INPUT_KEY] && match_input_key(lexer)) {
     lexer->result_symbol = INPUT_KEY;
+    lexer->mark_end(lexer);
     return true;
   }
 
+  lexer->mark_end(lexer);
   if (valid_symbols[TEXT]) {
     if (is_eof(lexer)) {
       lexer->result_symbol = TEXT;
       return true;
     }
     while (true) {
-      // FIXME: optimize false positive
-      // example: "test=f~false positive"
-      if (lexer->lookahead == '~' || lexer->lookahead == 0xA7 ||
-          lexer->lookahead == ':' || lexer->lookahead == '%') {
-        break;
+      uint32_t col = lexer->get_column(lexer);
+      if (lexer->lookahead == '~' && match_linebreak(lexer)) {
+        lexer->result_symbol = TEXT;
+        return true;
       }
-      lexer->advance(lexer, false);
+      if (lexer->lookahead == 0xA7 && match_format_code(lexer)) {
+        lexer->result_symbol = TEXT;
+        return true;
+      }
+      if (lexer->lookahead == ':' && match_input_key(lexer)) {
+        lexer->result_symbol = TEXT;
+        return true;
+      }
+      if (lexer->lookahead == '%' && match_format_specifier(lexer)) {
+        lexer->result_symbol = TEXT;
+        return true;
+      }
+      uint32_t new_col = lexer->get_column(lexer);
+      // Advance at least one character to avoid infinite loop.
+      if (new_col == col) {
+        lexer->advance(lexer, false);
+      }
+      lexer->mark_end(lexer);
       if (is_eof(lexer)) {
         break;
       }
