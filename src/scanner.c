@@ -302,26 +302,38 @@ bool tree_sitter_lang_external_scanner_scan(void *payload, TSLexer *lexer,
     return false;
   }
 
+  uint32_t start = lexer->get_column(lexer);
+  bool advanced = false;
   lexer->mark_end(lexer);
   if (valid_symbols[LINEBREAK] && match_linebreak(lexer)) {
     lexer->result_symbol = LINEBREAK;
     lexer->mark_end(lexer);
     return true;
   }
+  if (start != lexer->get_column(lexer)) {
+    advanced = true;
+  }
 
-  if (valid_symbols[FORMAT_CODE] && match_format_code(lexer)) {
+  if (!advanced && valid_symbols[FORMAT_CODE] && match_format_code(lexer)) {
     lexer->result_symbol = FORMAT_CODE;
     lexer->mark_end(lexer);
     return true;
   }
+  if (start != lexer->get_column(lexer)) {
+    advanced = true;
+  }
 
-  if (valid_symbols[FORMAT_SPECIFIER] && match_format_specifier(lexer)) {
+  if (!advanced && valid_symbols[FORMAT_SPECIFIER] &&
+      match_format_specifier(lexer)) {
     lexer->result_symbol = FORMAT_SPECIFIER;
     lexer->mark_end(lexer);
     return true;
   }
+  if (start != lexer->get_column(lexer)) {
+    advanced = true;
+  }
 
-  if (valid_symbols[INPUT_KEY] && match_input_key(lexer)) {
+  if (!advanced && valid_symbols[INPUT_KEY] && match_input_key(lexer)) {
     lexer->result_symbol = INPUT_KEY;
     lexer->mark_end(lexer);
     return true;
@@ -335,25 +347,38 @@ bool tree_sitter_lang_external_scanner_scan(void *payload, TSLexer *lexer,
     }
     while (true) {
       uint32_t col = lexer->get_column(lexer);
+      bool advanced = false;
       if (lexer->lookahead == '~' && match_linebreak(lexer)) {
         lexer->result_symbol = TEXT;
         return true;
       }
-      if (lexer->lookahead == 0xA7 && match_format_code(lexer)) {
+      if (col != lexer->get_column(lexer)) {
+        advanced = true;
+      }
+      if (!advanced && lexer->lookahead == 0xA7 && match_format_code(lexer)) {
         lexer->result_symbol = TEXT;
         return true;
       }
-      if (lexer->lookahead == ':' && match_input_key(lexer)) {
+      if (col != lexer->get_column(lexer)) {
+        advanced = true;
+      }
+      if (!advanced && lexer->lookahead == ':' && match_input_key(lexer)) {
         lexer->result_symbol = TEXT;
         return true;
       }
-      if (lexer->lookahead == '%' && match_format_specifier(lexer)) {
+      if (col != lexer->get_column(lexer)) {
+        advanced = true;
+      }
+      if (!advanced && lexer->lookahead == '%' &&
+          match_format_specifier(lexer)) {
         lexer->result_symbol = TEXT;
         return true;
       }
-      uint32_t new_col = lexer->get_column(lexer);
+      if (col != lexer->get_column(lexer)) {
+        advanced = true;
+      }
       // Advance at least one character to avoid infinite loop.
-      if (new_col == col) {
+      if (!advanced) {
         lexer->advance(lexer, false);
       }
       lexer->mark_end(lexer);
