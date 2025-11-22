@@ -37,7 +37,7 @@ static inline bool match_format_code(TSLexer *lexer) {
   if (lexer->lookahead == 0xA7) // '§' character
   {
     lexer->advance(lexer, false);
-    if (!is_eof(lexer)) {
+    if (!is_eof(lexer) && lexer->lookahead != ' ') {
       lexer->advance(lexer, false);
       return true;
     }
