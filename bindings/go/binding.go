@@ -13,3 +13,16 @@ import "unsafe"
 func Language() unsafe.Pointer {
 	return unsafe.Pointer(C.tree_sitter_lang())
 }
+
+const (
+	NodeKindSourceFile      string = "source_file"
+	NodeKindEntry           string = "entry"
+	NodeKindKey             string = "key"
+	NodeKindAssignment      string = "assignment"
+	NodeKindValue           string = "value"
+	NodeKindText            string = "text"
+	NodeKindLineBreak       string = "linebreak"
+	NodeKindInputKey        string = "input_key"
+	NodeKindFormatCode      string = "format_code" // §
+	NodeKindFormatSpecifier string = "format_specifier"
+)

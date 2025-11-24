@@ -18,26 +18,26 @@ module.exports = grammar({
     $.format_code,
     $.input_key,
     $.format_specifier,
-    $.emoji,
   ],
   rules: {
-    source_file: ($) => repeat(seq($._line, terminator)),
+    source_file: ($) => repeat(seq($.entry, terminator)),
 
-    _line: ($) =>
+    entry: ($) =>
       seq(
         // Any leading whitespace is ignored.
         // `   key=value` will be parsed as `key=value`.
         optional(/\s+/),
         choice(
-          $.comment,
+          $._comment,
           seq(
             field("key", $.key),
             field("assignment", $.assignment),
             optional(field("value", $.value)),
-            optional($.inline_comment)
+            optional($._inline_comment)
           )
         )
       ),
+    _comment: ($) => /#{2,}.*/,
 
     key: ($) => token(/[^=\r\n]+/),
     assignment: ($) => token("="),
@@ -52,9 +52,7 @@ module.exports = grammar({
           /[^\t]/
         )
       ),
-    comment: ($) => /#{2,}.*/,
     // Anything after a tab character is ignored.
-    // We're using `\t#` for inline comments.
-    inline_comment: ($) => /\t#.*/,
+    _inline_comment: ($) => /\t.*/,
   },
 });

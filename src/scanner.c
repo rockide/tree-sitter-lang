@@ -7,6 +7,8 @@ enum TokenType {
   FORMAT_CODE,
   INPUT_KEY,
   FORMAT_SPECIFIER,
+  KEY,
+  _COMMENT,
 };
 
 static inline bool match_literal(TSLexer *lexer, const char *pattern) {
