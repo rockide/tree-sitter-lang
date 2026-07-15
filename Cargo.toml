@@ -1,11 +1,11 @@
 [package]
 name = "tree-sitter-lang"
-description = "Tree sitter for Minecraft language."
-version = "0.1.0"
+description = "Tree-sitter grammar for Minecraft Bedrock Edition .lang localization files."
+version = "0.2.0"
 authors = ["rockide <renixiel@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-keywords = ["incremental", "parsing", "tree-sitter", "lang"]
+keywords = ["incremental", "parsing", "tree-sitter", "minecraft", "localization"]
 categories = ["parser-implementations", "parsing", "text-editors"]
 repository = "https://github.com/rockide/tree-sitter-lang"
 edition = "2021"

@@ -1,0 +1,8 @@
+## line comment
+
+
+key.rabu.name=value
+## line comment 2
+key2=value2	### This is a comment after a tab
+§k§e§y§3=value3  ## Not a comment because of space before
+key with spaces=value with spaces  ## Also not a comment

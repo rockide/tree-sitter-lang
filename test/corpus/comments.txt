@@ -1,0 +1,57 @@
+==================
+Full-line and inline comments
+==================
+
+## Section comment
+pack.title=Example## Adjacent comment
+pack.name=Example Pack	## Translator context
+pack.description=Description	### More translator context
+
+---
+
+(source_file
+  (comment)
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))
+    (inline_comment))
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))
+    (inline_comment))
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))
+    (inline_comment)))
+
+==================
+Space before comment markers keeps them in the value
+==================
+
+message=This ## is visible text
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))))
+
+==================
+Single hash after a tab is invalid
+:error
+==================
+
+message=Text	# Context
+
+---
+
+(source_file)

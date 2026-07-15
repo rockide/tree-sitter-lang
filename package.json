@@ -1,7 +1,7 @@
 {
   "name": "tree-sitter-lang",
-  "version": "0.1.0",
-  "description": "Tree sitter for Minecraft language.",
+  "version": "0.2.0",
+  "description": "Tree-sitter grammar for Minecraft Bedrock Edition .lang localization files.",
   "repository": "https://github.com/rockide/tree-sitter-lang",
   "license": "MIT",
   "author": {
@@ -15,13 +15,15 @@
     "incremental",
     "parsing",
     "tree-sitter",
+    "minecraft",
+    "bedrock",
+    "localization",
     "lang"
   ],
   "files": [
     "grammar.js",
     "tree-sitter.json",
     "binding.gyp",
-    "prebuilds/**",
     "bindings/node/*",
     "queries/*",
     "src/**",
@@ -33,11 +35,11 @@
   },
   "devDependencies": {
     "prebuildify": "^6.0.1",
-    "tree-sitter": "^0.22.4",
+    "tree-sitter": "^0.25.0",
     "tree-sitter-cli": "^0.25.10"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.22.4"
+    "tree-sitter": "^0.25.0"
   },
   "peerDependenciesMeta": {
     "tree-sitter": {
@@ -45,9 +47,13 @@
     }
   },
   "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "test:fixtures": "tree-sitter parse fixtures/*.lang --quiet",
+    "test:highlights": "tree-sitter highlight --check test/highlight/*.lang",
+    "test:wasm": "tree-sitter build --wasm",
     "install": "node-gyp-build",
     "prestart": "tree-sitter build --wasm",
-    "start": "tree-sitter playground",
-    "test": "node --test bindings/node/*_test.js"
+    "start": "tree-sitter playground"
   }
 }

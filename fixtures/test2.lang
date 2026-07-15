@@ -1,0 +1,4 @@
+## test2=~L~LINEBREAK~:not_input:~:_input_key.use:
+test=~LINEBREAK~:
+test=~LINEBREAK~:not:
+test=f~a~ok~LIN~LINEBREAK~f~~~~LINEBREAK~

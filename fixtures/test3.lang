@@ -1,0 +1,7 @@
+test=hello~LINEBREAK~World!~LINEBREAK~Test§cred§agreen
+mine=§cColored
+## comment
+action.hint.exit.console.boat=Press :_input_key.jump: to exit the boat
+test=%d :_fixme: ### not a comment because space
+commands.generic.boolean.invalid='%1$s' is not true or false	### inline comment
+commands.debug.stop=Stopped debug profiling after %.2f seconds (%1$d ticks)

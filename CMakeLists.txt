@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-lang
-        VERSION "0.1.0"
-        DESCRIPTION "Tree sitter for Minecraft language."
+        VERSION "0.2.0"
+        DESCRIPTION "Tree-sitter grammar for Minecraft Bedrock Edition .lang localization files."
         HOMEPAGE_URL "https://github.com/rockide/tree-sitter-lang"
         LANGUAGES C)
 

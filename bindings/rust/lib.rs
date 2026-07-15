@@ -4,8 +4,7 @@
 //! tree-sitter [`Parser`], and then use the parser to parse some code:
 //!
 //! ```
-//! let code = r#"
-//! "#;
+//! let code = "message=Hello %1$s";
 //! let mut parser = tree_sitter::Parser::new();
 //! let language = tree_sitter_lang::LANGUAGE;
 //! parser
@@ -32,9 +31,15 @@ pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_lang)
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers/6-static-node-types
 pub const NODE_TYPES: &str = include_str!("../../src/node-types.json");
 
-// NOTE: uncomment these to include any queries that this grammar contains:
+/// The syntax-highlighting query for this language.
+pub const HIGHLIGHTS_QUERY: &str = include_str!("../../queries/highlights.scm");
 
-// pub const HIGHLIGHTS_QUERY: &str = include_str!("../../queries/highlights.scm");
+/// The Zed-compatible outline query for this language.
+pub const OUTLINE_QUERY: &str = include_str!("../../queries/outline.scm");
+
+/// The Zed-compatible text-object query for this language.
+pub const TEXTOBJECTS_QUERY: &str = include_str!("../../queries/textobjects.scm");
+
 // pub const INJECTIONS_QUERY: &str = include_str!("../../queries/injections.scm");
 // pub const LOCALS_QUERY: &str = include_str!("../../queries/locals.scm");
 // pub const TAGS_QUERY: &str = include_str!("../../queries/tags.scm");
@@ -47,5 +52,7 @@ mod tests {
         parser
             .set_language(&super::LANGUAGE.into())
             .expect("Error loading Lang parser");
+        let tree = parser.parse("message=Hello %1$s", None).unwrap();
+        assert!(!tree.root_node().has_error());
     }
 }

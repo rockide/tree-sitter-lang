@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Verify generated parser
+        run: |
+          cp src/parser.c /tmp/parser.c
+          cp src/grammar.json /tmp/grammar.json
+          cp src/node-types.json /tmp/node-types.json
+          npm run generate
+          diff -u /tmp/parser.c src/parser.c
+          diff -u /tmp/grammar.json src/grammar.json
+          diff -u /tmp/node-types.json src/node-types.json
+
+      - name: Test grammar and queries
+        run: |
+          npm test
+          npm run test:fixtures
+          npm run test:highlights
+
+      - name: Test bindings
+        run: |
+          node --test bindings/node/binding_test.js
+          cargo test
+          go test ./...
+
+      - name: Build WebAssembly parser
+        run: npm run test:wasm

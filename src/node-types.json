@@ -1,12 +1,11 @@
 [
   {
-    "type": "source_file",
+    "type": "entry",
     "named": true,
-    "root": true,
     "fields": {
       "assignment": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "assignment",
@@ -14,9 +13,19 @@
           }
         ]
       },
-      "key": {
-        "multiple": true,
+      "comment": {
+        "multiple": false,
         "required": false,
+        "types": [
+          {
+            "type": "inline_comment",
+            "named": true
+          }
+        ]
+      },
+      "key": {
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "key",
@@ -25,7 +34,7 @@
         ]
       },
       "value": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
@@ -34,7 +43,13 @@
           }
         ]
       }
-    },
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
@@ -44,7 +59,7 @@
           "named": true
         },
         {
-          "type": "inline_comment",
+          "type": "entry",
           "named": true
         }
       ]
@@ -56,7 +71,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "format_code",
@@ -75,15 +90,15 @@
           "named": true
         },
         {
+          "type": "symbol",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "\u0000",
-    "named": false
   },
   {
     "type": "assignment",
@@ -115,6 +130,10 @@
   },
   {
     "type": "linebreak",
+    "named": true
+  },
+  {
+    "type": "symbol",
     "named": true
   },
   {

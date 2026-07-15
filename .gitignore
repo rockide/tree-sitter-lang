@@ -17,8 +17,11 @@ _obj/
 
 # Python artifacts
 .venv/
+__pycache__/
 dist/
 *.egg-info
+*.py[cod]
+*.pyd
 *.whl
 
 # C artifacts
