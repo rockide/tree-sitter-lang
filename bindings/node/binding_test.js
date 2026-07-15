@@ -5,5 +5,7 @@ const Parser = require("tree-sitter");
 
 test("can load grammar", () => {
   const parser = new Parser();
-  assert.doesNotThrow(() => parser.setLanguage(require(".")));
+  parser.setLanguage(require("."));
+  const tree = parser.parse("message=§cHello :_input_key.jump:");
+  assert.equal(tree.rootNode.hasError, false);
 });

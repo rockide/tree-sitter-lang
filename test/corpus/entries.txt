@@ -1,0 +1,69 @@
+==================
+Basic entries
+==================
+
+pack.name=Example Pack
+pack.description=A Bedrock resource pack
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text)))
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))))
+
+==================
+Empty value and final line without newline
+==================
+
+empty=
+next=value
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment))
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))))
+
+==================
+Equals signs belong to the value after the first delimiter
+==================
+
+expression=left=right
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))))
+
+==================
+Keys and values may contain spaces
+==================
+
+key with spaces=value with spaces
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text))))

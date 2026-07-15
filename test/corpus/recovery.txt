@@ -1,0 +1,21 @@
+==================
+Missing assignment is an error
+:error
+==================
+
+not an entry
+
+---
+
+(source_file)
+
+==================
+Tab without a comment marker is an error
+:error
+==================
+
+message=Text	invalid trailing data
+
+---
+
+(source_file)

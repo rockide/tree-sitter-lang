@@ -1,6 +1,12 @@
+(comment) @comment
+(inline_comment) @comment
+
 (key) @property
-(linebreak) @constant.builtin
 (assignment) @operator
-(format_code) @function
-(input_key) @keyword
-(format_specifier) @tag
+
+(text) @string
+(linebreak) @string @string.escape
+(format_code) @string @string.escape
+(format_specifier) @constant @string.special
+(input_key) @constant @constant.builtin
+(symbol) @constant @string.special.symbol

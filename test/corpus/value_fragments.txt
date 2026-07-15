@@ -1,0 +1,94 @@
+==================
+Bedrock value fragments
+==================
+
+message=§cRed§r normal~LINEBREAK~Press :_input_key.jump: :heart:
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment)
+    (value
+      (format_code)
+      (text)
+      (format_code)
+      (text)
+      (linebreak)
+      (text)
+      (input_key)
+      (text)
+      (symbol))))
+
+==================
+Printf-style format specifiers
+==================
+
+simple=%s %d %f %%
+positional='%1$s' is not true
+precision=Finished after %.2f seconds (%1$d ticks)
+position_and_precision=Value: %2$.3f
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment)
+    (value
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)))
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text)
+      (format_specifier)
+      (text)))
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text)
+      (format_specifier)
+      (text)
+      (format_specifier)
+      (text)))
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text)
+      (text)
+      (text)
+      (format_specifier))))
+
+==================
+Unknown and incomplete fragments remain text
+==================
+
+unknown=§z %q ~LINEBREAK :_input_key.jump :not closed
+
+---
+
+(source_file
+  (entry
+    (key)
+    (assignment)
+    (value
+      (text)
+      (text)
+      (text)
+      (text)
+      (text)
+      (text)
+      (text)
+      (text)
+      (text)
+      (text))))

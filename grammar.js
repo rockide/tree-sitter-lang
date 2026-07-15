@@ -1,5 +1,5 @@
 /**
- * @file Tree sitter for Minecraft language.
+ * @file Tree-sitter grammar for Minecraft Bedrock Edition .lang files.
  * @author respectZ <renixiel@gmail.com>
  * @license MIT
  */
@@ -7,52 +7,80 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-const newline = /\r?\n/;
-const terminator = choice(newline, "\0");
-
 module.exports = grammar({
   name: "lang",
-  externals: ($) => [
-    $.text,
-    $.linebreak,
-    $.format_code,
-    $.input_key,
-    $.format_specifier,
-  ],
+
+  // Whitespace is significant in .lang files: newlines terminate entries and a
+  // tab introduces an inline translator comment.
+  extras: ($) => [],
+
   rules: {
-    source_file: ($) => repeat(seq($.entry, terminator)),
+    source_file: ($) =>
+      seq(
+        repeat(choice($._newline, seq(choice($.entry, $.comment), $._newline))),
+        optional(choice($.entry, $.comment)),
+      ),
 
     entry: ($) =>
       seq(
-        // Any leading whitespace is ignored.
-        // `   key=value` will be parsed as `key=value`.
-        optional(/\s+/),
-        choice(
-          $._comment,
-          seq(
-            field("key", $.key),
-            field("assignment", $.assignment),
-            optional(field("value", $.value)),
-            optional($._inline_comment)
-          )
-        )
+        field("key", $.key),
+        field("assignment", $.assignment),
+        optional(field("value", $.value)),
+        optional(field("comment", $.inline_comment)),
       ),
-    _comment: ($) => /#{2,}.*/,
 
-    key: ($) => token(/[^=\r\n]+/),
-    assignment: ($) => token("="),
+    comment: ($) => token(seq("##", /[^\r\n]*/)),
+
+    key: ($) => token(/[^=\t\r\n]+/),
+
+    assignment: ($) => "=",
+
     value: ($) =>
       repeat1(
         choice(
           $.text,
           $.linebreak,
           $.format_code,
-          $.input_key,
           $.format_specifier,
-          /[^\t]/
-        )
+          $.input_key,
+          $.symbol,
+        ),
       ),
-    // Anything after a tab character is ignored.
-    _inline_comment: ($) => /\t.*/,
+
+    text: ($) =>
+      token(
+        choice(
+          // A space before ## keeps the markers and the remainder visible.
+          /[^§%~:#\t\r\n]* +##[^\r\n]*/,
+          /[^§%~:#\t\r\n]+/,
+          /[§%~:#]/,
+        ),
+      ),
+
+    linebreak: ($) => token("~LINEBREAK~"),
+
+    format_code: ($) => token(seq("§", /[0-9a-gk-orA-GK-OR]/)),
+
+    format_specifier: ($) =>
+      token(
+        choice(
+          "%%",
+          /%[sdf]/,
+          /%[0-9]+\$[sdf]/,
+          /%\.[0-9]+f/,
+          /%[0-9]+\$\.[0-9]+f/,
+        ),
+      ),
+
+    input_key: ($) => token(/:_input_key\.[A-Za-z0-9_.-]+:/),
+
+    symbol: ($) => token(/:[A-Za-z_][A-Za-z0-9_.-]*:/),
+
+    // An inline comment begins with adjacent ## or with a tab followed by ##.
+    // A regular space before ## intentionally remains part of the value.
+    inline_comment: ($) =>
+      token(choice(seq("\t", "##", /[^\r\n]*/), seq("##", /[^\r\n]*/))),
+
+    _newline: ($) => /\r?\n/,
   },
 });

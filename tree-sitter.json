@@ -4,7 +4,7 @@
     {
       "name": "lang",
       "camelcase": "Lang",
-      "title": "Lang",
+      "title": "Minecraft Bedrock Lang",
       "scope": "source.rockide.lang",
       "file-types": ["lang"],
       "injection-regex": "^lang$",
@@ -13,9 +13,9 @@
     }
   ],
   "metadata": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "license": "MIT",
-    "description": "Tree sitter for Minecraft language.",
+    "description": "Tree-sitter grammar for Minecraft Bedrock Edition .lang localization files.",
     "authors": [
       {
         "name": "rockide",

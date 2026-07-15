@@ -21,8 +21,11 @@ const (
 	NodeKindAssignment      string = "assignment"
 	NodeKindValue           string = "value"
 	NodeKindText            string = "text"
+	NodeKindComment         string = "comment"
+	NodeKindInlineComment   string = "inline_comment"
 	NodeKindLineBreak       string = "linebreak"
 	NodeKindInputKey        string = "input_key"
+	NodeKindSymbol          string = "symbol"
 	NodeKindFormatCode      string = "format_code" // §
 	NodeKindFormatSpecifier string = "format_specifier"
 )

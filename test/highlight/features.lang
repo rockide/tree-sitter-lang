@@ -1,0 +1,18 @@
+## Section heading
+pack.name=Example Pack
+## ^ property
+##        ^ string
+
+direct=Value## Comment
+##          ^^ comment
+
+spaced=Value ## Visible
+##           ^^ string
+
+action.hint=§cPress :_input_key.jump: :heart: %1$d~LINEBREAK~	## Context
+##          ^^ string.escape
+##                  ^^^^^^^^^^^^^^^^^ constant.builtin
+##                                     ^^^^^^^ string.special.symbol
+##                                             ^^^^ string.special
+##                                                 ^^^^^^^^^^^ string.escape
+##                                                             ^^^^^^^^^^ comment

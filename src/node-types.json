@@ -5,7 +5,7 @@
     "fields": {
       "assignment": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "assignment",
@@ -13,9 +13,19 @@
           }
         ]
       },
-      "key": {
+      "comment": {
         "multiple": false,
         "required": false,
+        "types": [
+          {
+            "type": "inline_comment",
+            "named": true
+          }
+        ]
+      },
+      "key": {
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "key",
@@ -45,6 +55,10 @@
       "required": false,
       "types": [
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "entry",
           "named": true
         }
@@ -57,7 +71,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "format_code",
@@ -76,6 +90,10 @@
           "named": true
         },
         {
+          "type": "symbol",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -83,11 +101,11 @@
     }
   },
   {
-    "type": "\u0000",
-    "named": false
+    "type": "assignment",
+    "named": true
   },
   {
-    "type": "assignment",
+    "type": "comment",
     "named": true
   },
   {
@@ -96,6 +114,10 @@
   },
   {
     "type": "format_specifier",
+    "named": true
+  },
+  {
+    "type": "inline_comment",
     "named": true
   },
   {
@@ -108,6 +130,10 @@
   },
   {
     "type": "linebreak",
+    "named": true
+  },
+  {
+    "type": "symbol",
     "named": true
   },
   {
